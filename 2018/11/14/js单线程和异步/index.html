@@ -89,14 +89,14 @@
 <meta property="og:site_name" content="Hale">
 <meta property="og:description" content="前言 说到js的单线程（single threaded）和异步（asynchronous），很多同学不禁会想，这不是自相矛盾么？其实，单线程和异步确实不能同时成为一个语言的特性。js选择了成为单线程的语言，所以它本身不可能是异步的，但js的宿主环境（比如浏览器，Node）是多线程的，宿主环境通过某种方式（事件驱动，下文会讲）使得js具备了异步的属性。往下看，你会发现js的机制是多么的简单高效！ 说">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://bilizhai.github.io/2018/11/14/js单线程和异步/images/js-thread.png">
+<meta property="og:image" content="http://bilizhai.github.io/2018/11/14/js单线程和异步/bilizhai.github.io/images/js-thread.png">
 <meta property="og:image" content="http://bilizhai.github.io/2018/11/14/js单线程和异步/../images/js-thread1.png">
 <meta property="og:image" content="http://bilizhai.github.io/2018/11/14/js单线程和异步/../images/js-thread2.png">
-<meta property="og:updated_time" content="2018-11-14T15:09:06.528Z">
+<meta property="og:updated_time" content="2018-11-14T15:11:15.333Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS的单线程和异步">
 <meta name="twitter:description" content="前言 说到js的单线程（single threaded）和异步（asynchronous），很多同学不禁会想，这不是自相矛盾么？其实，单线程和异步确实不能同时成为一个语言的特性。js选择了成为单线程的语言，所以它本身不可能是异步的，但js的宿主环境（比如浏览器，Node）是多线程的，宿主环境通过某种方式（事件驱动，下文会讲）使得js具备了异步的属性。往下看，你会发现js的机制是多么的简单高效！ 说">
-<meta name="twitter:image" content="http://bilizhai.github.io/2018/11/14/js单线程和异步/images/js-thread.png">
+<meta name="twitter:image" content="http://bilizhai.github.io/2018/11/14/js单线程和异步/bilizhai.github.io/images/js-thread.png">
 
 
 
@@ -339,7 +339,7 @@
         <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><hr>
 <p>说到js的单线程（single threaded）和异步（asynchronous），很多同学不禁会想，这不是自相矛盾么？其实，单线程和异步确实不能同时成为一个语言的特性。js选择了成为单线程的语言，所以它本身不可能是异步的，但js的宿主环境（比如浏览器，Node）是多线程的，宿主环境通过某种方式（事件驱动，下文会讲）使得js具备了异步的属性。往下看，你会发现js的机制是多么的简单高效！</p>
 <h4 id="说说浏览器"><a href="#说说浏览器" class="headerlink" title="说说浏览器"></a>说说浏览器</h4><p>js是单线程语言，浏览器只分配给js一个主线程，用来执行任务（函数），但一次只能执行一个任务，这些任务形成一个任务队列排队等候执行，但前端的某些任务是非常耗时的，比如网络请求，定时器和事件监听，如果让他们和别的任务一样，都老老实实的排队等待执行的话，执行效率会非常的低，甚至导致页面的假死。所以，浏览器为这些耗时任务开辟了另外的线程，主要包括http请求线程，浏览器定时触发器，浏览器事件触发线程，这些任务是异步的。下图说明了浏览器的主要线程。</p>
-<p><img src="//bilizhai.github.io/2018/11/14/js单线程和异步/images/js-thread.png" alt="js-thread"></p>
+<p><img src="//bilizhai.github.io/2018/11/14/js单线程和异步/bilizhai.github.io/images/js-thread.png" alt="js-thread"></p>
 <p>图片来自popAnt 画得太好，忍不住引过来 （<a href="http://blog.csdn.net/kfanning/article/details/5768776）" target="_blank" rel="noopener">http://blog.csdn.net/kfanning/article/details/5768776）</a></p>
 <h4 id="再说说任务队列"><a href="#再说说任务队列" class="headerlink" title="再说说任务队列"></a>再说说任务队列</h4><p>刚才说到浏览器为网络请求这样的异步任务单独开了一个线程，那么问题来了，这些异步任务完成后，主线程怎么知道呢？答案就是回调函数，整个程序是事件驱动的，每个事件都会绑定相应的回调函数，举个栗子，有段代码设置了一个定时器</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(time is out);</span><br><span class="line">&#125;，<span class="number">50</span>）;</span><br></pre></td></tr></table></figure>
