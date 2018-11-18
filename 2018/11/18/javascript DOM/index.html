@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="JS,">
+  <meta name="keywords" content="JS,DOM,">
 
 
 
@@ -81,18 +81,20 @@
 
 
 
-<meta name="description" content="js冒泡和捕获是事件的两种行为，使用event.stopPropagation()起到阻止捕获和冒泡阶段中当前事件的进一步传播。使用event.preventDefault()可以取消默认事件。 防止冒泡和捕获w3c的方法是e.stopPropagation()，IE则是使用e.cancelBubble = true stopPropagation也是事件对象(Event)的一个方法，作用是阻止目">
-<meta name="keywords" content="JS">
+<meta name="description" content="Javascript DOMDOM(Document Object Model),文档对象模型。简单的说就是一套操作文档内容的方法。 文档：DOM的D如果没有document(文档)，DOM就无从谈起。当创建了一个网页并把它加载到web浏览器中，DOM就悄然而生，它将根据你编写的网页文档创建一个文档对象。 对象：DOM的Ojavascript中的对象分为三种：用户自定义对象（用户自己创建的对象），">
+<meta name="keywords" content="JS,DOM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS阻止冒泡和取消默认事件(默认行为)">
-<meta property="og:url" content="http://bilizhai.github.io/2018/11/27/js阻止冒泡和取消默认事件/index.html">
+<meta property="og:title" content="javascript DOM和DOM操作的四种基本方法">
+<meta property="og:url" content="http://bilizhai.github.io/2018/11/18/javascript DOM/index.html">
 <meta property="og:site_name" content="Hale">
-<meta property="og:description" content="js冒泡和捕获是事件的两种行为，使用event.stopPropagation()起到阻止捕获和冒泡阶段中当前事件的进一步传播。使用event.preventDefault()可以取消默认事件。 防止冒泡和捕获w3c的方法是e.stopPropagation()，IE则是使用e.cancelBubble = true stopPropagation也是事件对象(Event)的一个方法，作用是阻止目">
+<meta property="og:description" content="Javascript DOMDOM(Document Object Model),文档对象模型。简单的说就是一套操作文档内容的方法。 文档：DOM的D如果没有document(文档)，DOM就无从谈起。当创建了一个网页并把它加载到web浏览器中，DOM就悄然而生，它将根据你编写的网页文档创建一个文档对象。 对象：DOM的Ojavascript中的对象分为三种：用户自定义对象（用户自己创建的对象），">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T16:58:51.277Z">
+<meta property="og:image" content="https://img-blog.csdn.net/20171021194223534?">
+<meta property="og:updated_time" content="2018-11-18T16:30:12.561Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS阻止冒泡和取消默认事件(默认行为)">
-<meta name="twitter:description" content="js冒泡和捕获是事件的两种行为，使用event.stopPropagation()起到阻止捕获和冒泡阶段中当前事件的进一步传播。使用event.preventDefault()可以取消默认事件。 防止冒泡和捕获w3c的方法是e.stopPropagation()，IE则是使用e.cancelBubble = true stopPropagation也是事件对象(Event)的一个方法，作用是阻止目">
+<meta name="twitter:title" content="javascript DOM和DOM操作的四种基本方法">
+<meta name="twitter:description" content="Javascript DOMDOM(Document Object Model),文档对象模型。简单的说就是一套操作文档内容的方法。 文档：DOM的D如果没有document(文档)，DOM就无从谈起。当创建了一个网页并把它加载到web浏览器中，DOM就悄然而生，它将根据你编写的网页文档创建一个文档对象。 对象：DOM的Ojavascript中的对象分为三种：用户自定义对象（用户自己创建的对象），">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20171021194223534?">
 
 
 
@@ -122,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://bilizhai.github.io/2018/11/27/js阻止冒泡和取消默认事件/">
+  <link rel="canonical" href="http://bilizhai.github.io/2018/11/18/javascript DOM/">
 
 
 
 
 
-  <title>JS阻止冒泡和取消默认事件(默认行为) | Hale</title>
+  <title>javascript DOM和DOM操作的四种基本方法 | Hale</title>
   
 
 
@@ -255,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bilizhai.github.io/2018/11/27/js阻止冒泡和取消默认事件/">
+    <link itemprop="mainEntityOfPage" href="http://bilizhai.github.io/2018/11/18/javascript DOM/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hale">
@@ -272,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JS阻止冒泡和取消默认事件(默认行为)</h1>
+          <h1 class="post-title" itemprop="name headline">javascript DOM和DOM操作的四种基本方法</h1>
         
 
         <div class="post-meta">
@@ -284,8 +286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-27T00:00:00+08:00">
-                2018-11-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-18T00:00:00+08:00">
+                2018-11-18
               </time>
             
 
@@ -322,30 +324,30 @@
       
 
       
-        <p>js冒泡和捕获是事件的两种行为，使用event.stopPropagation()起到阻止捕获和冒泡阶段中当前事件的进一步传播。使用event.preventDefault()可以取消默认事件。</p>
-<h5 id="防止冒泡和捕获"><a href="#防止冒泡和捕获" class="headerlink" title="防止冒泡和捕获"></a>防止冒泡和捕获</h5><p>w3c的方法是e.stopPropagation()，IE则是使用e.cancelBubble = true</p>
-<p>stopPropagation也是事件对象(Event)的一个方法，作用是阻止目标元素的冒泡事件，但是会不阻止默认行为。什么是冒泡事件？如在一个按钮是绑定一个”click”事件，那么”click”事件会依次在它的父级元素中被触发 。stopPropagation就是阻止目标元素的事件冒泡到父级元素。如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos; onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li onclick=&apos;alert(&quot;li&quot;);&apos;&gt;test&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>上面的代码，Demo如下,我们单击test时，会依次触发alert(“li”),alert(“ul”),alert(“div”)，这就是事件冒泡。</p>
-<p>阻止冒泡<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.event? window.event.cancelBubble = true : e.stopPropagation();</span><br></pre></td></tr></table></figure></p>
-<h5 id="取消默认事件"><a href="#取消默认事件" class="headerlink" title="取消默认事件"></a>取消默认事件</h5><p>w3c的方法是e.preventDefault()，IE则是使用e.returnValue = false;</p>
-<p>preventDefault它是事件对象(Event)的一个方法，作用是取消一个目标元素的默认行为。既然是说默认行为，当然是元素必须有默认行为才能被取消，如果元素本身就没有默认行为，调用当然就无效了。什么元素有默认行为呢？如链接<a>，提交按钮<input type="”submit”">等。当Event 对象的 cancelable为false时，表示没有默认行为，这时即使有默认行为，调用preventDefault也是不会起作用的。</a></p>
-<p>我们都知道，链接<a>的默认动作就是跳转到指定页面，下面就以它为例，阻止它的跳转：</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//假定有链接&lt;a href=&quot;http://caibaojian.com/&quot; id=&quot;testA&quot; &gt;caibaojian.com&lt;/a&gt;</span><br><span class="line">var a = document.getElementById(&quot;testA&quot;);</span><br><span class="line">a.onclick =function(e)&#123;</span><br><span class="line">if(e.preventDefault)&#123;</span><br><span class="line">e.preventDefault();</span><br><span class="line">&#125;else&#123;</span><br><span class="line">window.event.returnValue == false;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="return-false"><a href="#return-false" class="headerlink" title="return false"></a>return false</h5><p>javascript的return false只会阻止默认行为，而是用jQuery的话则既阻止默认行为又防止对象冒泡。</p>
-<p>下面这个使用原生js，只会阻止默认行为，不会停止冒泡</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos;  onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul  onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li id=&apos;ul-a&apos; onclick=&apos;alert(&quot;li&quot;);&apos;&gt;&lt;a href=&quot;http://caibaojian.com/&quot;id=&quot;testB&quot;&gt;caibaojian.com&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">var a = document.getElementById(&quot;testB&quot;);</span><br><span class="line">a.onclick = function()&#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>下面这个是使用jQuery，既阻止默认行为又停止冒泡</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos;  onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul  onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li id=&apos;ul-a&apos; onclick=&apos;alert(&quot;li&quot;);&apos;&gt;&lt;a href=&quot;http://caibaojian.com/&quot;id=&quot;testC&quot;&gt;caibaojian.com&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">$(&quot;#testC&quot;).on(&apos;click&apos;,function()&#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h5 id="总结使用方法"><a href="#总结使用方法" class="headerlink" title="总结使用方法"></a>总结使用方法</h5><p>当需要停止冒泡行为时，可以使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function stopBubble(e) &#123; </span><br><span class="line">//如果提供了事件对象，则这是一个非IE浏览器 </span><br><span class="line">if ( e &amp;&amp; e.stopPropagation ) </span><br><span class="line">    //因此它支持W3C的stopPropagation()方法 </span><br><span class="line">    e.stopPropagation(); </span><br><span class="line">else </span><br><span class="line">    //否则，我们需要使用IE的方式来取消事件冒泡 </span><br><span class="line">    window.event.cancelBubble = true; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当需要阻止默认行为时，可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//阻止浏览器的默认行为 </span><br><span class="line">function stopDefault( e ) &#123; </span><br><span class="line">    //阻止默认浏览器动作(W3C) </span><br><span class="line">    if ( e &amp;&amp; e.preventDefault ) </span><br><span class="line">        e.preventDefault(); </span><br><span class="line">    //IE中阻止函数器默认动作的方式 </span><br><span class="line">    else </span><br><span class="line">        window.event.returnValue = false; </span><br><span class="line">    return false; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h5 id="事件注意点"><a href="#事件注意点" class="headerlink" title="事件注意点"></a>事件注意点</h5><p>1.event代表事件的状态，例如触发event对象的元素、鼠标的位置及状态、按下的键等等；<br>2.event对象只在事件发生的过程中才有效。</p>
-<p>firefox里的event跟IE里的不同，IE里的是全局变量，随时可用；firefox里的要用参数引导才能用，是运行时的临时变量。<br>在IE/Opera中是window.event，在Firefox中是event；而事件的对象，在IE中是window.event.srcElement，在Firefox中是event.target，Opera中两者都可用。</p>
-<p>1.下面两句效果相同：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function a(e)&#123;</span><br><span class="line">var e = (e) ? e : ((window.event) ? window.event : null); </span><br><span class="line">var e = e || window.event; // firefox下window.event为null, IE下event为null</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h4 id="Javascript-DOM"><a href="#Javascript-DOM" class="headerlink" title="Javascript DOM"></a>Javascript DOM</h4><p>DOM(Document Object Model),文档对象模型。简单的说就是一套操作文档内容的方法。</p>
+<p>文档：DOM的D<br>如果没有document(文档)，DOM就无从谈起。当创建了一个网页并把它加载到web浏览器中，DOM就悄然而生，它将根据你编写的网页文档创建一个文档对象。</p>
+<p>对象：DOM的O<br>javascript中的对象分为三种：用户自定义对象（用户自己创建的对象），内建对象（内建在js语言的对象，如Array,Math,Date），宿主对象(由浏览器提供的对象，最基础的就是window对象)<br>Window对象对应浏览器窗口的本身，这个对象的属性和方法通常称为BOM（浏览器对象模型）。但我们不需要与BOM打太多交道，我们需要将注意力集中到浏览器窗口的内部而不是浏览器窗口本身。我们将着重探讨如何对网页的内容进行处理，而用来实现这一目标的载体就是document对象。</p>
+<p>模型：DOM的M<br>代表某种事物的表现形式。就像一个火车模型代表一列火车，一张地图代表一个城市一样，DOM代表被加载到浏览器窗口里的当前网页。浏览器向我们提供了当前网页的“地图”，我们可以通过javascript去读取这张“地图”。既然是地图，就必须有诸如方向，比例尺等记号。要想看懂地图，就必须弄懂这些记号的含义。所以我们必须要把各种用来描述文档的记号弄明白。</p>
+<p>需要注意的是，我们需要把DOM当作一个整体，不能分割看待，即DOM（文档对象模型）是一套操作文档内容的方法。</p>
+<p>DOM把一份文档表示为一棵树（节点树），是我们理解和运用这一模型的关键。 </p>
+<p>例如:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Shopping list&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">    &lt;meta charset="utf-8"&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;What to buy&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">&lt;p id="buy" title="a gentle reminder"&gt;Don't forget to buy this stuff&lt;/</span>p&gt;</span><br><span class="line">&lt;ul id=<span class="string">"purchases"</span>&gt;</span><br><span class="line">    &lt;li&gt;A tin od beans&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">    &lt;li&gt;Cheese&lt;/</span>li&gt;</span><br><span class="line">    &lt;li&gt;Milk&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">&lt;/u</span>l&gt;</span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>用树表示这个网页的结构：<br><img src="https://img-blog.csdn.net/20171021194223534?" alt=""></p>
+<p>DOM存在着不同类型的节点：</p>
+<p>1.元素节点：DOM的原子是元素节点。事实上，文档的每一个元素都是一个对象。（后面会详细讲）<br>2.文本节点：元素节点构成文档的结构，则文本节点构成文本的内容。文本节点总是被包含在元素节点的内部，但并不是所有元素节点都包含文本节点。<br>3.属性节点：元素或多或少都具有一些属性。<br>(除外，还有一些其它类型的节点，如注释)</p>
+<h4 id="DOM操作的四种基本方法"><a href="#DOM操作的四种基本方法" class="headerlink" title="DOM操作的四种基本方法"></a>DOM操作的四种基本方法</h4><p>DOM操作的四种基本方法：getElementById(), getElementsByTagname(), getAttribute(), setAttribute().</p>
+<h5 id="1-getElementById-："><a href="#1-getElementById-：" class="headerlink" title="1. getElementById()："></a>1. getElementById()：</h5><p>参数：元素的ID值。 （元素节点简称元素）<br>返回值：一个有指定ID的元素对象（元素是对象）<br>注：这个方法是与document对象相关联，只能由document对象调用。<br>用法：document.getElementById(Id)<br>例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert(<span class="keyword">typeof</span> <span class="built_in">document</span>.getElementById(<span class="string">"purchases"</span>));<span class="comment">//object</span></span><br></pre></td></tr></table></figure>
+<h5 id="2-getElementsByTagName"><a href="#2-getElementsByTagName" class="headerlink" title="2. getElementsByTagName():"></a>2. getElementsByTagName():</h5><p>参数：元素名<br>返回值：一个对象数组。这个数组里每个元素都是对象，每个对象分别对应着文档里给定标签的一个元素。<br>注：这个方法可和一般元素关联。这个方法允许我们把通配符当作它的参数，返回在某份html文档里总共有多少个元素节点。<br>用法：element.getElementsByTagName(TagName)<br>例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> items=<span class="built_in">document</span>.getElementsByTagName(<span class="string">"li"</span>);</span><br><span class="line">alert(items.length);<span class="comment">//3</span></span><br><span class="line">alert(<span class="built_in">document</span>.getElementsByTagName(“*”));<span class="comment">//12</span></span><br></pre></td></tr></table></figure>
+<h5 id="3-getAttribute"><a href="#3-getAttribute" class="headerlink" title="3. getAttribute():"></a>3. getAttribute():</h5><p>参数：元素的某个属性名<br>返回值：这个元素属性的属性值<br>注：getAttribute()不能通过document对象调用，只能通过元素对象去调用它。<br>用法：object.getAttribute(Attribute)<br>例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> item=<span class="built_in">document</span>.getElementById(<span class="string">"buy"</span>);</span><br><span class="line"> alert(item.getAttribute(<span class="string">"title"</span>));<span class="comment">//a gentle reminder</span></span><br></pre></td></tr></table></figure>
+<h5 id="4-setAttribute"><a href="#4-setAttribute" class="headerlink" title="4. setAttribute():"></a>4. setAttribute():</h5><p>参数：两个参数，分别为：元素的某个属性名、这个元素的新属性值<br>返回值：无返回值<br>注：setAttribute()可以对节点的属性值进行修改，只能通过元素节点对象调用。如果元素原来没有这个属性值，则setAttribute创建此attribute,然后再赋新值；如果已存在此属性，则对原来的值进行覆盖。<br>用法：element.setAttribute(attribute, value).<br>例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> para=<span class="built_in">document</span>.getElementsByTagName(<span class="string">"p"</span>);<span class="comment">//返回的是数组</span></span><br><span class="line"> para[<span class="number">0</span>].setAttribute(<span class="string">"title"</span>,<span class="string">"a list of goods"</span>);</span><br><span class="line"> alert(para[<span class="number">0</span>].getAttribute(<span class="string">"title"</span>));<span class="comment">//a list of goods</span></span><br></pre></td></tr></table></figure>
+<p>说明：通过setAttribute（）方法对文档作出的改变，但这张改变并未反映到源代码中，也就是说，源代码中属性值仍旧是原来的属性值。这种“表里不一”的现象缘于DOM的工作模式：先加载文档的静态内容，再以动态方式对它们进行刷新，动态刷新不改变文档的静态内容，而对页面内容的刷新，不需要用户在他们的浏览器里执行刷新操作就可以实现。</p>
+<p>DOM中还有许多其它的属性和方法，但这四种基本方法是编写许多DOM脚本的基石。</p>
+<hr>
 <blockquote>
-<p>著作权归作者所有。<br>商业转载请联系作者获得授权,非商业转载请注明出处。<br>链接:<a href="http://caibaojian.com/javascript-stoppropagation-preventdefault.html" target="_blank" rel="noopener">http://caibaojian.com/javascript-stoppropagation-preventdefault.html</a><br>来源:<a href="http://caibaojian.com" target="_blank" rel="noopener">http://caibaojian.com</a></p>
+<p>作者：有思想的俗人<br>来源：CSDN<br>原文：<a href="https://blog.csdn.net/iamchuancey/article/details/78306072" target="_blank" rel="noopener">https://blog.csdn.net/iamchuancey/article/details/78306072</a><br>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
 </blockquote>
 
       
@@ -364,7 +366,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JS/" rel="tag"><i class="fa fa-tag"></i> JS</a>
+            <a href="/tags/JS-DOM/" rel="tag"><i class="fa fa-tag"></i> JS,DOM</a>
           
         </div>
       
@@ -377,8 +379,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/18/javascript DOM/" rel="next" title="javascript DOM和DOM操作的四种基本方法">
-                <i class="fa fa-chevron-left"></i> javascript DOM和DOM操作的四种基本方法
+              <a href="/2018/11/18/js闭包/" rel="next" title="JS闭包">
+                <i class="fa fa-chevron-left"></i> JS闭包
               </a>
             
           </div>
@@ -387,8 +389,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/28/设计模式/" rel="prev" title="可能影响你一生的js写法之单例模式!">
-                可能影响你一生的js写法之单例模式! <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/27/js阻止冒泡和取消默认事件/" rel="prev" title="JS阻止冒泡和取消默认事件(默认行为)">
+                JS阻止冒泡和取消默认事件(默认行为) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -548,7 +550,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#防止冒泡和捕获"><span class="nav-number">1.</span> <span class="nav-text">防止冒泡和捕获</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#取消默认事件"><span class="nav-number">2.</span> <span class="nav-text">取消默认事件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#return-false"><span class="nav-number">3.</span> <span class="nav-text">return false</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结使用方法"><span class="nav-number">4.</span> <span class="nav-text">总结使用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#事件注意点"><span class="nav-number">5.</span> <span class="nav-text">事件注意点</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Javascript-DOM"><span class="nav-number">1.</span> <span class="nav-text">Javascript DOM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DOM操作的四种基本方法"><span class="nav-number">2.</span> <span class="nav-text">DOM操作的四种基本方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-getElementById-："><span class="nav-number">2.1.</span> <span class="nav-text">1. getElementById()：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-getElementsByTagName"><span class="nav-number">2.2.</span> <span class="nav-text">2. getElementsByTagName():</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-getAttribute"><span class="nav-number">2.3.</span> <span class="nav-text">3. getAttribute():</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-setAttribute"><span class="nav-number">2.4.</span> <span class="nav-text">4. setAttribute():</span></a></li></ol></li></ol></div>
             
 
           </div>
