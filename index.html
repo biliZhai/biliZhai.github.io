@@ -254,291 +254,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bilizhai.github.io/2018/11/28/设计模式/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="hale">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hale">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/28/设计模式/" itemprop="url">可能影响你一生的js写法之单例模式!</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-28T00:00:00+08:00">
-                2018-11-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>《parctical common lisp》的作者曾说，如果你需要一种模式，那一定是哪里出了问题。他所说的问题是指因为语言的天生缺陷，不得不去寻求和总结一种通用的解决方案。</p>
-<p>不管是弱类型或强类型，静态或动态语言，命令式或说明式语言、每种语言都有天生的优缺点。一个牙买加运动员， 在短跑甚至拳击方面有一些优势，在练瑜伽上就欠缺一些。</p>
-<p>术士和暗影牧师很容易成为一个出色的辅助，而一个背着梅肯满地图飞的敌法就会略显尴尬。 换到程序中, 静态语言里可能需要花很多功夫来实现装饰者，而js由于能随时往对象上面扔方法，以至于装饰者模式在js里成了鸡肋。</p>
-<p>讲javascript设计模式的书还比较少. Pro javaScript Design Patterns.是比较经典的一本，但是它里面的例子举得比较啰嗦，所以结合我在工作中写过的代码，把我的理解总结一下。如果我的理解出现了偏差，请不吝指正。</p>
-<blockquote>
-<p>单列模式</p>
-</blockquote>
-<p>单例模式的定义是产生一个类的唯一实例，但js本身是一种“无类”语言。很多讲js设计模式的文章把{}当成一个单例来使用也勉强说得通。因为js生成对象的方式有很多种，我们来看下另一种更有意义的单例。<br>有这样一个常见的需求，点击某个按钮的时候需要在页面弹出一个遮罩层。比如web.qq.com点击登录的时候.</p>
-<p>这个生成灰色背景遮罩层的代码是很好写的.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createMask = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> <span class="built_in">document</span>.body.appendChild(  <span class="built_in">document</span>.createElement(div)  );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$( <span class="string">'button'</span> ).click( <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line">   Var mask  = createMask();</span><br><span class="line"> </span><br><span class="line">   mask.show();</span><br><span class="line"> </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>问题是, 这个遮罩层是全局唯一的, 那么每次调用createMask都会创建一个新的div, 虽然可以在隐藏遮罩层的把它remove掉. 但显然这样做不合理.<br>再看下第二种方案, 在页面的一开始就创建好这个div. 然后用一个变量引用它.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mask = <span class="built_in">document</span>.body.appendChild( <span class="built_in">document</span>.createElement( <span class="string">''</span>div<span class="string">' ) );</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">$( '</span>button<span class="string">' ).click( function()&#123;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">   mask.show();</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">&#125; )</span></span><br></pre></td></tr></table></figure>
-<p>这样确实在页面只会创建一个遮罩层div, 但是另外一个问题随之而来, 也许我们永远都不需要这个遮罩层, 那又浪费掉一个div, 对dom节点的任何操作都应该非常吝啬.<br>如果可以借助一个变量. 来判断是否已经创建过div呢?</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mask;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> createMask = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( mask ) <span class="keyword">return</span> mask;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line"> </span><br><span class="line">mask = <span class="built_in">document</span>,body.appendChild(  <span class="built_in">document</span>.createElement(div)  );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> mask;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>看起来不错, 到这里的确完成了一个产生单列对象的函数. 我们再仔细看这段代码有什么不妥.<br>首先这个函数是存在一定副作用的, 函数体内改变了外界变量mask的引用, 在多人协作的项目中, createMask是个不安全的函数. 另一方面, mask这个全局变量并不是非需不可. 再来改进一下.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createMask = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> mask;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       <span class="keyword">return</span> mask || ( mask = <span class="built_in">document</span>.body.appendChild( <span class="built_in">document</span>.createElement(<span class="string">'div'</span>) ) )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
-<p>用了个简单的闭包把变量mask包起来, 至少对于createMask函数来讲, 它是封闭的.<br>可能看到这里, 会觉得单例模式也太简单了. 的确一些设计模式都是非常简单的, 即使从没关注过设计模式的概念, 在平时的代码中也不知不觉用到了一些设计模式. 就像多年前我明白老汉推车是什么回事的时候也想过尼玛原来这就是老汉推车.<br>GOF里的23种设计模式, 也是在软件开发中早就存在并反复使用的模式. 如果程序员没有明确意识到他使用过某些模式, 那么下次他也许会错过更合适的设计 (这段话来自《松本行弘的程序世界》).<br>再回来正题, 前面那个单例还是有缺点. 它只能用于创建遮罩层. 假如我又需要写一个函数, 用来创建一个唯一的xhr对象呢? 能不能找到一个通用的singleton包装器.<br>js中函数是第一型, 意味着函数也可以当参数传递. 看看最终的代码.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> singleton = <span class="function"><span class="keyword">function</span>(<span class="params"> fn </span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> result || ( result = fn .apply( <span class="keyword">this</span>, <span class="built_in">arguments</span> ) );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> createMask = singleton( <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="built_in">document</span>.body.appendChild( <span class="built_in">document</span>.createElement(<span class="string">'div'</span>) );</span><br><span class="line"> </span><br><span class="line"> &#125;)</span><br></pre></td></tr></table></figure>
-<p>用一个变量来保存第一次的返回值, 如果它已经被赋值过, 那么在以后的调用中优先返回该变量. 而真正创建遮罩层的代码是通过回调函数的方式传人到singleton包装器中的. 这种方式其实叫桥接模式. 关于桥接模式, 放在后面一点点来说.<br>然而singleton函数也不是完美的, 它始终还是需要一个变量result来寄存div的引用. 遗憾的是js的函数式特性还不足以完全的消除声明和语句.</p>
-<blockquote>
-<p>转载自AlloyTeam：<a href="http://www.alloyteam.com/2012/10/common-javascript-design-patterns/" target="_blank" rel="noopener">http://www.alloyteam.com/2012/10/common-javascript-design-patterns/</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bilizhai.github.io/2018/11/27/js阻止冒泡和取消默认事件/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="hale">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hale">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/27/js阻止冒泡和取消默认事件/" itemprop="url">JS阻止冒泡和取消默认事件(默认行为)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-27T00:00:00+08:00">
-                2018-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>js冒泡和捕获是事件的两种行为，使用event.stopPropagation()起到阻止捕获和冒泡阶段中当前事件的进一步传播。使用event.preventDefault()可以取消默认事件。</p>
-<h5 id="防止冒泡和捕获"><a href="#防止冒泡和捕获" class="headerlink" title="防止冒泡和捕获"></a>防止冒泡和捕获</h5><p>w3c的方法是e.stopPropagation()，IE则是使用e.cancelBubble = true</p>
-<p>stopPropagation也是事件对象(Event)的一个方法，作用是阻止目标元素的冒泡事件，但是会不阻止默认行为。什么是冒泡事件？如在一个按钮是绑定一个”click”事件，那么”click”事件会依次在它的父级元素中被触发 。stopPropagation就是阻止目标元素的事件冒泡到父级元素。如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos; onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li onclick=&apos;alert(&quot;li&quot;);&apos;&gt;test&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>上面的代码，Demo如下,我们单击test时，会依次触发alert(“li”),alert(“ul”),alert(“div”)，这就是事件冒泡。</p>
-<p>阻止冒泡<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.event? window.event.cancelBubble = true : e.stopPropagation();</span><br></pre></td></tr></table></figure></p>
-<h5 id="取消默认事件"><a href="#取消默认事件" class="headerlink" title="取消默认事件"></a>取消默认事件</h5><p>w3c的方法是e.preventDefault()，IE则是使用e.returnValue = false;</p>
-<p>preventDefault它是事件对象(Event)的一个方法，作用是取消一个目标元素的默认行为。既然是说默认行为，当然是元素必须有默认行为才能被取消，如果元素本身就没有默认行为，调用当然就无效了。什么元素有默认行为呢？如链接<a>，提交按钮<input type="”submit”">等。当Event 对象的 cancelable为false时，表示没有默认行为，这时即使有默认行为，调用preventDefault也是不会起作用的。</a></p>
-<p>我们都知道，链接<a>的默认动作就是跳转到指定页面，下面就以它为例，阻止它的跳转：</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//假定有链接&lt;a href=&quot;http://caibaojian.com/&quot; id=&quot;testA&quot; &gt;caibaojian.com&lt;/a&gt;</span><br><span class="line">var a = document.getElementById(&quot;testA&quot;);</span><br><span class="line">a.onclick =function(e)&#123;</span><br><span class="line">if(e.preventDefault)&#123;</span><br><span class="line">e.preventDefault();</span><br><span class="line">&#125;else&#123;</span><br><span class="line">window.event.returnValue == false;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="return-false"><a href="#return-false" class="headerlink" title="return false"></a>return false</h5><p>javascript的return false只会阻止默认行为，而是用jQuery的话则既阻止默认行为又防止对象冒泡。</p>
-<p>下面这个使用原生js，只会阻止默认行为，不会停止冒泡</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos;  onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul  onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li id=&apos;ul-a&apos; onclick=&apos;alert(&quot;li&quot;);&apos;&gt;&lt;a href=&quot;http://caibaojian.com/&quot;id=&quot;testB&quot;&gt;caibaojian.com&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">var a = document.getElementById(&quot;testB&quot;);</span><br><span class="line">a.onclick = function()&#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>下面这个是使用jQuery，既阻止默认行为又停止冒泡</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos;  onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul  onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li id=&apos;ul-a&apos; onclick=&apos;alert(&quot;li&quot;);&apos;&gt;&lt;a href=&quot;http://caibaojian.com/&quot;id=&quot;testC&quot;&gt;caibaojian.com&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">$(&quot;#testC&quot;).on(&apos;click&apos;,function()&#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h5 id="总结使用方法"><a href="#总结使用方法" class="headerlink" title="总结使用方法"></a>总结使用方法</h5><p>当需要停止冒泡行为时，可以使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function stopBubble(e) &#123; </span><br><span class="line">//如果提供了事件对象，则这是一个非IE浏览器 </span><br><span class="line">if ( e &amp;&amp; e.stopPropagation ) </span><br><span class="line">    //因此它支持W3C的stopPropagation()方法 </span><br><span class="line">    e.stopPropagation(); </span><br><span class="line">else </span><br><span class="line">    //否则，我们需要使用IE的方式来取消事件冒泡 </span><br><span class="line">    window.event.cancelBubble = true; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当需要阻止默认行为时，可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//阻止浏览器的默认行为 </span><br><span class="line">function stopDefault( e ) &#123; </span><br><span class="line">    //阻止默认浏览器动作(W3C) </span><br><span class="line">    if ( e &amp;&amp; e.preventDefault ) </span><br><span class="line">        e.preventDefault(); </span><br><span class="line">    //IE中阻止函数器默认动作的方式 </span><br><span class="line">    else </span><br><span class="line">        window.event.returnValue = false; </span><br><span class="line">    return false; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h5 id="事件注意点"><a href="#事件注意点" class="headerlink" title="事件注意点"></a>事件注意点</h5><p>1.event代表事件的状态，例如触发event对象的元素、鼠标的位置及状态、按下的键等等；<br>2.event对象只在事件发生的过程中才有效。</p>
-<p>firefox里的event跟IE里的不同，IE里的是全局变量，随时可用；firefox里的要用参数引导才能用，是运行时的临时变量。<br>在IE/Opera中是window.event，在Firefox中是event；而事件的对象，在IE中是window.event.srcElement，在Firefox中是event.target，Opera中两者都可用。</p>
-<p>1.下面两句效果相同：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function a(e)&#123;</span><br><span class="line">var e = (e) ? e : ((window.event) ? window.event : null); </span><br><span class="line">var e = e || window.event; // firefox下window.event为null, IE下event为null</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>著作权归作者所有。<br>商业转载请联系作者获得授权,非商业转载请注明出处。<br>链接:<a href="http://caibaojian.com/javascript-stoppropagation-preventdefault.html" target="_blank" rel="noopener">http://caibaojian.com/javascript-stoppropagation-preventdefault.html</a><br>来源:<a href="http://caibaojian.com" target="_blank" rel="noopener">http://caibaojian.com</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bilizhai.github.io/2018/11/18/javascript DOM/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1267,6 +982,291 @@ alert(last);
 <p>原理图:<br><img src="/2018/10/28/js排序/../images/mp8.jpg" alt="">;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">// 合并排序：将无序的数组 拆成N部分进行有序处理，然后合并；</span><br><span class="line">// 参考代码： https://gist.github.com/paullewis/1982121</span><br><span class="line">function sort9(array) &#123;</span><br><span class="line">  var result = array.slice(0);</span><br><span class="line"></span><br><span class="line">  // 递归调用合并函数</span><br><span class="line">  function sort(array) &#123;</span><br><span class="line">    var length = array.length,</span><br><span class="line">    mid = Math.floor(length * 0.5),</span><br><span class="line">    left = array.slice(0, mid),</span><br><span class="line">    right = array.slice(mid, length);</span><br><span class="line"></span><br><span class="line">    if (length === 1) &#123;</span><br><span class="line">      return array;</span><br><span class="line">    &#125;</span><br><span class="line">    return merge(sort(left), sort(right));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 合并 两有序的数组</span><br><span class="line">  function merge(left, right) &#123;</span><br><span class="line">    var result = [];</span><br><span class="line"></span><br><span class="line">    while (left.length || right.length) &#123;</span><br><span class="line"></span><br><span class="line">      if (left.length &amp;&amp; right.length) &#123;</span><br><span class="line"></span><br><span class="line">        if (left[0] &lt; right[0]) &#123;</span><br><span class="line">          result.push(left.shift());</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          result.push(right.shift());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">      &#125; else if (left.length) &#123;</span><br><span class="line">        result.push(left.shift());</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        result.push(right.shift());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return sort(result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>作者：萧强<br>链接：<a href="https://www.jianshu.com/p/7e6589306a27" target="_blank" rel="noopener">https://www.jianshu.com/p/7e6589306a27</a><br>來源：简书<br>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bilizhai.github.io/2018/10/28/设计模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hale">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hale">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/28/设计模式/" itemprop="url">可能影响你一生的js写法之单例模式!</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-28T00:00:00+08:00">
+                2018-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>《parctical common lisp》的作者曾说，如果你需要一种模式，那一定是哪里出了问题。他所说的问题是指因为语言的天生缺陷，不得不去寻求和总结一种通用的解决方案。</p>
+<p>不管是弱类型或强类型，静态或动态语言，命令式或说明式语言、每种语言都有天生的优缺点。一个牙买加运动员， 在短跑甚至拳击方面有一些优势，在练瑜伽上就欠缺一些。</p>
+<p>术士和暗影牧师很容易成为一个出色的辅助，而一个背着梅肯满地图飞的敌法就会略显尴尬。 换到程序中, 静态语言里可能需要花很多功夫来实现装饰者，而js由于能随时往对象上面扔方法，以至于装饰者模式在js里成了鸡肋。</p>
+<p>讲javascript设计模式的书还比较少. Pro javaScript Design Patterns.是比较经典的一本，但是它里面的例子举得比较啰嗦，所以结合我在工作中写过的代码，把我的理解总结一下。如果我的理解出现了偏差，请不吝指正。</p>
+<blockquote>
+<p>单列模式</p>
+</blockquote>
+<p>单例模式的定义是产生一个类的唯一实例，但js本身是一种“无类”语言。很多讲js设计模式的文章把{}当成一个单例来使用也勉强说得通。因为js生成对象的方式有很多种，我们来看下另一种更有意义的单例。<br>有这样一个常见的需求，点击某个按钮的时候需要在页面弹出一个遮罩层。比如web.qq.com点击登录的时候.</p>
+<p>这个生成灰色背景遮罩层的代码是很好写的.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createMask = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> <span class="built_in">document</span>.body.appendChild(  <span class="built_in">document</span>.createElement(div)  );</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$( <span class="string">'button'</span> ).click( <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line">   Var mask  = createMask();</span><br><span class="line"> </span><br><span class="line">   mask.show();</span><br><span class="line"> </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>问题是, 这个遮罩层是全局唯一的, 那么每次调用createMask都会创建一个新的div, 虽然可以在隐藏遮罩层的把它remove掉. 但显然这样做不合理.<br>再看下第二种方案, 在页面的一开始就创建好这个div. 然后用一个变量引用它.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mask = <span class="built_in">document</span>.body.appendChild( <span class="built_in">document</span>.createElement( <span class="string">''</span>div<span class="string">' ) );</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">$( '</span>button<span class="string">' ).click( function()&#123;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">   mask.show();</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">&#125; )</span></span><br></pre></td></tr></table></figure>
+<p>这样确实在页面只会创建一个遮罩层div, 但是另外一个问题随之而来, 也许我们永远都不需要这个遮罩层, 那又浪费掉一个div, 对dom节点的任何操作都应该非常吝啬.<br>如果可以借助一个变量. 来判断是否已经创建过div呢?</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mask;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> createMask = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> ( mask ) <span class="keyword">return</span> mask;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line"> </span><br><span class="line">mask = <span class="built_in">document</span>,body.appendChild(  <span class="built_in">document</span>.createElement(div)  );</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> mask;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看起来不错, 到这里的确完成了一个产生单列对象的函数. 我们再仔细看这段代码有什么不妥.<br>首先这个函数是存在一定副作用的, 函数体内改变了外界变量mask的引用, 在多人协作的项目中, createMask是个不安全的函数. 另一方面, mask这个全局变量并不是非需不可. 再来改进一下.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createMask = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> mask;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       <span class="keyword">return</span> mask || ( mask = <span class="built_in">document</span>.body.appendChild( <span class="built_in">document</span>.createElement(<span class="string">'div'</span>) ) )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
+<p>用了个简单的闭包把变量mask包起来, 至少对于createMask函数来讲, 它是封闭的.<br>可能看到这里, 会觉得单例模式也太简单了. 的确一些设计模式都是非常简单的, 即使从没关注过设计模式的概念, 在平时的代码中也不知不觉用到了一些设计模式. 就像多年前我明白老汉推车是什么回事的时候也想过尼玛原来这就是老汉推车.<br>GOF里的23种设计模式, 也是在软件开发中早就存在并反复使用的模式. 如果程序员没有明确意识到他使用过某些模式, 那么下次他也许会错过更合适的设计 (这段话来自《松本行弘的程序世界》).<br>再回来正题, 前面那个单例还是有缺点. 它只能用于创建遮罩层. 假如我又需要写一个函数, 用来创建一个唯一的xhr对象呢? 能不能找到一个通用的singleton包装器.<br>js中函数是第一型, 意味着函数也可以当参数传递. 看看最终的代码.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> singleton = <span class="function"><span class="keyword">function</span>(<span class="params"> fn </span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> result || ( result = fn .apply( <span class="keyword">this</span>, <span class="built_in">arguments</span> ) );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> createMask = singleton( <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">return</span> <span class="built_in">document</span>.body.appendChild( <span class="built_in">document</span>.createElement(<span class="string">'div'</span>) );</span><br><span class="line"> </span><br><span class="line"> &#125;)</span><br></pre></td></tr></table></figure>
+<p>用一个变量来保存第一次的返回值, 如果它已经被赋值过, 那么在以后的调用中优先返回该变量. 而真正创建遮罩层的代码是通过回调函数的方式传人到singleton包装器中的. 这种方式其实叫桥接模式. 关于桥接模式, 放在后面一点点来说.<br>然而singleton函数也不是完美的, 它始终还是需要一个变量result来寄存div的引用. 遗憾的是js的函数式特性还不足以完全的消除声明和语句.</p>
+<blockquote>
+<p>转载自AlloyTeam：<a href="http://www.alloyteam.com/2012/10/common-javascript-design-patterns/" target="_blank" rel="noopener">http://www.alloyteam.com/2012/10/common-javascript-design-patterns/</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bilizhai.github.io/2018/10/27/js阻止冒泡和取消默认事件/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hale">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hale">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/27/js阻止冒泡和取消默认事件/" itemprop="url">JS阻止冒泡和取消默认事件(默认行为)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-27T00:00:00+08:00">
+                2018-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>js冒泡和捕获是事件的两种行为，使用event.stopPropagation()起到阻止捕获和冒泡阶段中当前事件的进一步传播。使用event.preventDefault()可以取消默认事件。</p>
+<h5 id="防止冒泡和捕获"><a href="#防止冒泡和捕获" class="headerlink" title="防止冒泡和捕获"></a>防止冒泡和捕获</h5><p>w3c的方法是e.stopPropagation()，IE则是使用e.cancelBubble = true</p>
+<p>stopPropagation也是事件对象(Event)的一个方法，作用是阻止目标元素的冒泡事件，但是会不阻止默认行为。什么是冒泡事件？如在一个按钮是绑定一个”click”事件，那么”click”事件会依次在它的父级元素中被触发 。stopPropagation就是阻止目标元素的事件冒泡到父级元素。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos; onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li onclick=&apos;alert(&quot;li&quot;);&apos;&gt;test&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>上面的代码，Demo如下,我们单击test时，会依次触发alert(“li”),alert(“ul”),alert(“div”)，这就是事件冒泡。</p>
+<p>阻止冒泡<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.event? window.event.cancelBubble = true : e.stopPropagation();</span><br></pre></td></tr></table></figure></p>
+<h5 id="取消默认事件"><a href="#取消默认事件" class="headerlink" title="取消默认事件"></a>取消默认事件</h5><p>w3c的方法是e.preventDefault()，IE则是使用e.returnValue = false;</p>
+<p>preventDefault它是事件对象(Event)的一个方法，作用是取消一个目标元素的默认行为。既然是说默认行为，当然是元素必须有默认行为才能被取消，如果元素本身就没有默认行为，调用当然就无效了。什么元素有默认行为呢？如链接<a>，提交按钮<input type="”submit”">等。当Event 对象的 cancelable为false时，表示没有默认行为，这时即使有默认行为，调用preventDefault也是不会起作用的。</a></p>
+<p>我们都知道，链接<a>的默认动作就是跳转到指定页面，下面就以它为例，阻止它的跳转：</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//假定有链接&lt;a href=&quot;http://caibaojian.com/&quot; id=&quot;testA&quot; &gt;caibaojian.com&lt;/a&gt;</span><br><span class="line">var a = document.getElementById(&quot;testA&quot;);</span><br><span class="line">a.onclick =function(e)&#123;</span><br><span class="line">if(e.preventDefault)&#123;</span><br><span class="line">e.preventDefault();</span><br><span class="line">&#125;else&#123;</span><br><span class="line">window.event.returnValue == false;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="return-false"><a href="#return-false" class="headerlink" title="return false"></a>return false</h5><p>javascript的return false只会阻止默认行为，而是用jQuery的话则既阻止默认行为又防止对象冒泡。</p>
+<p>下面这个使用原生js，只会阻止默认行为，不会停止冒泡</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos;  onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul  onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li id=&apos;ul-a&apos; onclick=&apos;alert(&quot;li&quot;);&apos;&gt;&lt;a href=&quot;http://caibaojian.com/&quot;id=&quot;testB&quot;&gt;caibaojian.com&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">var a = document.getElementById(&quot;testB&quot;);</span><br><span class="line">a.onclick = function()&#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面这个是使用jQuery，既阻止默认行为又停止冒泡</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&apos;div&apos;  onclick=&apos;alert(&quot;div&quot;);&apos;&gt;</span><br><span class="line">&lt;ul  onclick=&apos;alert(&quot;ul&quot;);&apos;&gt;</span><br><span class="line">&lt;li id=&apos;ul-a&apos; onclick=&apos;alert(&quot;li&quot;);&apos;&gt;&lt;a href=&quot;http://caibaojian.com/&quot;id=&quot;testC&quot;&gt;caibaojian.com&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">$(&quot;#testC&quot;).on(&apos;click&apos;,function()&#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h5 id="总结使用方法"><a href="#总结使用方法" class="headerlink" title="总结使用方法"></a>总结使用方法</h5><p>当需要停止冒泡行为时，可以使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function stopBubble(e) &#123; </span><br><span class="line">//如果提供了事件对象，则这是一个非IE浏览器 </span><br><span class="line">if ( e &amp;&amp; e.stopPropagation ) </span><br><span class="line">    //因此它支持W3C的stopPropagation()方法 </span><br><span class="line">    e.stopPropagation(); </span><br><span class="line">else </span><br><span class="line">    //否则，我们需要使用IE的方式来取消事件冒泡 </span><br><span class="line">    window.event.cancelBubble = true; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当需要阻止默认行为时，可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//阻止浏览器的默认行为 </span><br><span class="line">function stopDefault( e ) &#123; </span><br><span class="line">    //阻止默认浏览器动作(W3C) </span><br><span class="line">    if ( e &amp;&amp; e.preventDefault ) </span><br><span class="line">        e.preventDefault(); </span><br><span class="line">    //IE中阻止函数器默认动作的方式 </span><br><span class="line">    else </span><br><span class="line">        window.event.returnValue = false; </span><br><span class="line">    return false; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="事件注意点"><a href="#事件注意点" class="headerlink" title="事件注意点"></a>事件注意点</h5><p>1.event代表事件的状态，例如触发event对象的元素、鼠标的位置及状态、按下的键等等；<br>2.event对象只在事件发生的过程中才有效。</p>
+<p>firefox里的event跟IE里的不同，IE里的是全局变量，随时可用；firefox里的要用参数引导才能用，是运行时的临时变量。<br>在IE/Opera中是window.event，在Firefox中是event；而事件的对象，在IE中是window.event.srcElement，在Firefox中是event.target，Opera中两者都可用。</p>
+<p>1.下面两句效果相同：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function a(e)&#123;</span><br><span class="line">var e = (e) ? e : ((window.event) ? window.event : null); </span><br><span class="line">var e = e || window.event; // firefox下window.event为null, IE下event为null</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>著作权归作者所有。<br>商业转载请联系作者获得授权,非商业转载请注明出处。<br>链接:<a href="http://caibaojian.com/javascript-stoppropagation-preventdefault.html" target="_blank" rel="noopener">http://caibaojian.com/javascript-stoppropagation-preventdefault.html</a><br>来源:<a href="http://caibaojian.com" target="_blank" rel="noopener">http://caibaojian.com</a></p>
 </blockquote>
 
           
