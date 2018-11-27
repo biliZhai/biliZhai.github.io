@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://bilizhai.github.io/"/>
-  <updated>2018-11-18T16:30:12.561Z</updated>
+  <updated>2018-11-27T14:01:35.716Z</updated>
   <id>http://bilizhai.github.io/</id>
   
   <author>
@@ -15,6 +15,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://bilizhai.github.io/2018/11/27/%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E6%98%AF%E6%95%B0%E7%BB%84%E8%BF%98%E6%98%AF%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://bilizhai.github.io/2018/11/27/判断一个变量类型是数组还是对象/</id>
+    <published>2018-11-27T14:01:35.716Z</published>
+    <updated>2018-11-27T14:01:35.716Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>javascript DOM和DOM操作的四种基本方法</title>
